@@ -1,30 +1,22 @@
 import { HttpHandler, app, input } from '@azure/functions'
-import { CosmosClient } from '@azure/cosmos'
+import { MongoClient } from 'mongodb'
 
-const client = new CosmosClient(process.env.CosmosDbConnectionString!).database('ImageLibrary')
+const client = new MongoClient(process.env.CosmosDbConnectionString!)
 
 const httpTrigger: HttpHandler = async (req, ctx) => {
   // Query data from Cosmos DB, with pagination and search
   const query = req.query
-  const continuation = query.get('continuation')
+  const page = +query.get('page')! || 1
   const search = query.get('search') || ''
 
-  const queryIterator = client.container('images').items
-    .query({
-      query: `SELECT * FROM c WHERE CONTAINS(c.title, @search)`,
-      parameters: [{ name: '@search', value: search }],
-    }, { enableScanInQuery: true, maxItemCount: 10, continuationToken: continuation || undefined })
+  const data = await client.db('ImageLibaray').collection('images').find(search ? { title: { $regex: search, $options: 'i' } } : {})
+    .skip((page - 1) * 10).limit(10).toArray()
 
-  const { resources: items, requestCharge, continuationToken, hasMoreResults } = await queryIterator.fetchNext();
-
-  // Return the results
   return {
-    status: 200,
-    body: {
-      items,
-      requestCharge,
-      continuation: hasMoreResults ? continuationToken : undefined
-    } as any
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
   }
 }
 
