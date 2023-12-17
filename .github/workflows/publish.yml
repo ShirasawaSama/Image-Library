@@ -24,7 +24,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          super_secret: ${{ secrets.ENDPOINT }}
+          ENDPOINT: ${{ secrets.ENDPOINT }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
