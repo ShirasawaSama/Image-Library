@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from './components/Header'
 import ItemCard from './components/ItemCard'
 import SignIn from './pages/SignIn'
-import { BrowserRouter, Route, Routes, redirect, useNavigate, useParams } from 'react-router-dom'
+import { HashRouter, Route, Routes, redirect, useNavigate, useParams } from 'react-router-dom'
 import type { Item } from './types'
 import { searchImages } from './service'
 import InfiniteScroll from 'react-infinite-scroller'
@@ -84,7 +84,7 @@ function Main() {
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path='/' Component={Main} />
         <Route path='/profile/:username' Component={Main} />
@@ -92,7 +92,7 @@ const App: React.FC = () => {
         <Route path='/signup' Component={SignIn} />
         <Route path='*' action={() => redirect('/')} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
