@@ -3,7 +3,7 @@ import { username } from '../service'
 import { Link } from 'react-router-dom'
 import ImageUpload from './ImageUpload'
 
-const Header: React.FC<{ doSearch: (text: string) => void }> = ({ doSearch }) => {
+const Header: React.FC<{ doSearch: (text: string) => void, refresh: () => void }> = ({ doSearch, refresh }) => {
   const [search, setSearch] = useState('')
   const [open, setOpen] = useState(false)
 
@@ -32,7 +32,15 @@ const Header: React.FC<{ doSearch: (text: string) => void }> = ({ doSearch }) =>
         </div>
         <div className="flex items-center space-x-4">
           {username
-            ? <Link className="text-gray-400 hover:text-white" to={'/profile/' + username}>{username}</Link>
+            ? <>
+              <button className="text-gray-400 hover:text-white" onClick={
+                () => {
+                  localStorage.removeItem('token')
+                  location.reload()
+                }
+              }>Sign out</button>
+              <Link className="bg-pink-500 text-white px-4 py-2 rounded text-sm font-medium" to={'/profile/' + username}>{username}'s profile</Link>
+            </>
             : <>
               <Link className="text-gray-400 hover:text-white" to='/signin'>Sign in</Link>
               <Link className="bg-pink-500 text-white px-4 py-2 rounded text-sm font-medium" to='/signup'>Sign up</Link>
@@ -41,7 +49,7 @@ const Header: React.FC<{ doSearch: (text: string) => void }> = ({ doSearch }) =>
         </div>
       </div>
 
-      {username && <ImageUpload open={open} onClose={() => setOpen(false)} />}
+      {username && <ImageUpload open={open} onClose={() => setOpen(false)} refresh={refresh} />}
     </header>
   )
 }

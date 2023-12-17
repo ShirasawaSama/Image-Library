@@ -10,7 +10,7 @@ const ImagePlaceholder = <span className='text-gray-400 opacity-75'>
   </svg>
 </span>
 
-const ImageUpload: React.FC<{ open: boolean, onClose: () => void }> = ({ open, onClose }) => {
+const ImageUpload: React.FC<{ open: boolean, onClose: () => void, refresh: () => void }> = ({ open, onClose, refresh }) => {
   const [image, setImage] = useState<File | null>(null)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -73,7 +73,10 @@ const ImageUpload: React.FC<{ open: boolean, onClose: () => void }> = ({ open, o
           onClick={() => {
             if (!image || !title) return
             setLoading(true)
-            upload(image!, title, description).then(close).finally(() => setLoading(false))
+            upload(image!, title, description).then(close).finally(() => {
+              setLoading(false)
+              refresh()
+            })
           }}
           disabled={!image || !title || loading}
         >

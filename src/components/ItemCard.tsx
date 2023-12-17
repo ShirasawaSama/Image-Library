@@ -7,7 +7,7 @@ import { translate } from '../service'
 const ItemCard: React.FC<{ item: Item }> = ({ item }) => {
   const [detailsTranslate, setDetailsTranslate] = React.useState('')
   return (
-    <div className='bg-gray-800 p-2 rounded'>
+    <div className='bg-gray-800 p-2 rounded' style={{ height: 'fit-content' }}>
       <img src={item.file} alt={item.title} className='w-full h-48 object-cover rounded' />
       <div className='mt-2'>
         <h2 className='text-lg font-semibold'>{item.title}</h2>

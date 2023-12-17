@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from './components/Header'
 import ItemCard from './components/ItemCard'
 import SignIn from './pages/SignIn'
-import { BrowserRouter, Route, Routes, redirect, useParams } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, redirect, useNavigate, useParams } from 'react-router-dom'
 import type { Item } from './types'
 import { searchImages } from './service'
 import InfiniteScroll from 'react-infinite-scroller'
@@ -11,7 +11,13 @@ const Footer: React.FC = () => {
   return (
     <footer className='bg-gray-800 p-4 mt-4'>
       <div className='max-w-7xl mx-auto text-center text-xs text-gray-400'>
-        © 2023 Shirasawa
+        © 2023 Shirasawa All rights reserved.<br />
+        <a
+          href='https://github.com/ShirasawaSama/Image-Library' target='_blank' rel='noreferrer'
+          className='text-gray-600 hover:text-gray-400 hover:underline'
+        >
+          ImageLibrary is open source. View the code on GitHub. (AGPL-3.0)
+        </a>
       </div>
     </footer>
   )
@@ -36,6 +42,7 @@ const Cards: React.FC<{ items: Item[], search: string, loadMore: (page: number) 
 function Main() {
   const [items, setItems] = useState<Item[]>([])
   const [search, setSearch] = useState('')
+  const nav = useNavigate()
   const profileUsername = useParams().username || ''
   const pageRef = React.useRef(1)
 
@@ -48,12 +55,21 @@ function Main() {
 
   return (
     <>
-      <Header doSearch={(text: string) => {
-        pageRef.current = 0
-        setItems([])
-        setSearch(text)
-        searchImages(1, text, profileUsername).then(setItems)
-      }} />
+      <Header
+        doSearch={(text: string) => {
+          pageRef.current = 0
+          setItems([])
+          setSearch(text)
+          searchImages(1, text, profileUsername).then(setItems)
+        }}
+        refresh={() => {
+          pageRef.current = 0
+          setItems([])
+          setSearch('')
+          nav('/')
+          searchImages(1, '', '').then(setItems)
+        }}
+      />
       <main className='max-w-7xl mx-auto p-4' style={{ minHeight: 'calc(100vh - 140px)' }}>
         <Cards items={items} search={search} username={profileUsername} loadMore={() => {
           const page = pageRef.current + 1
