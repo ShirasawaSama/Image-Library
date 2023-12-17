@@ -12,6 +12,7 @@ const httpTrigger: HttpHandler = async (req, ctx) => {
   if (search) searchObj['title'] = { $regex: search, $options: 'i' }
   if (username) searchObj['username'] = username
   const data = await db.collection('images').find(searchObj)
+    .sort({ _id: -1 })
     .skip((page - 1) * 10).limit(10).toArray()
 
   return {

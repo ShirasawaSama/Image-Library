@@ -87,6 +87,8 @@ Environment variables:
 - `CosmosDbConnectionString`: The connection string of the Cosmos DB account
 - `StorageConnectionAppSetting`: The connection string of the storage account
 - `StorageBaseUrl`: The base URL of the blob storage
+- `TranslatorKey`: The key of the Azure Translator service
+- `TranslatorRegion`: The region of the Azure Translator service, e.g. `eastus`
 
 8. Set the CORS policy
 

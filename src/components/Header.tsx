@@ -11,7 +11,7 @@ const Header: React.FC<{ doSearch: (text: string) => void }> = ({ doSearch }) =>
     <header className="bg-gray-800 p-4">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center space-x-4">
-          <h1 className="text-xl">ImageLibrary</h1>
+          <Link className="text-xl" to='/'>ImageLibrary</Link>
           {username && <button className="bg-green-500 text-white px-4 py-2 rounded text-sm font-medium" onClick={() => setOpen(true)}>New post</button>}
         </div>
         <div className="flex rounded-full bg-[#0d1829] px-2 w-full max-w-[35rem]">
@@ -32,7 +32,7 @@ const Header: React.FC<{ doSearch: (text: string) => void }> = ({ doSearch }) =>
         </div>
         <div className="flex items-center space-x-4">
           {username
-            ? <Link className="text-gray-400 hover:text-white" to='/profile'>{username}</Link>
+            ? <Link className="text-gray-400 hover:text-white" to={'/profile/' + username}>{username}</Link>
             : <>
               <Link className="text-gray-400 hover:text-white" to='/signin'>Sign in</Link>
               <Link className="bg-pink-500 text-white px-4 py-2 rounded text-sm font-medium" to='/signup'>Sign up</Link>

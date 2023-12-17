@@ -17,9 +17,6 @@
     "build": "vite build",
     "test": "npx oxlint@latest"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

@@ -4,8 +4,8 @@ const TOKEN = localStorage.getItem('token')
 
 export const username = TOKEN ? JSON.parse(window.atob(TOKEN.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).username : null
 
-export const searchImages = async (page: number, search: string) =>
-  fetch(`${ENDPOINT}/images?page=${page}&search=${encodeURIComponent(search)}`).then(res => res.json())
+export const searchImages = async (page: number, search: string, profileUsername: string) =>
+  fetch(`${ENDPOINT}/images?page=${page}&search=${encodeURIComponent(search)}&username=${profileUsername}`).then(res => res.json())
 
 export const register = async (username: string, password: string) =>
   fetch(`${ENDPOINT}/register`, {
@@ -54,3 +54,5 @@ export const upload = async (file: File, title: string, details: string) => {
 
   return res.json()
 }
+
+export const translate = async (id: string) => fetch(`${ENDPOINT}/translate/${id}`).then(res => res.json()).then(res => res.details)
