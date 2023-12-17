@@ -1,8 +1,8 @@
 export interface Item {
   _id: string
-  src: string
-  user: string
+  file: string
+  username: string
   title: string
   details: string
-  time: string
+  createdAt: string
 }

@@ -3,8 +3,9 @@ import type { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/fu
 import { db, response, getUsername } from './utils'
 
 const randomId = Date.now().toString(36) + Math.random().toString(36).slice(2)
+const path = `images/${randomId}.png`
 const blobOutput = output.storageBlob({
-  path: 'images/' + randomId + '.png',
+  path,
   connection: 'StorageConnectionAppSetting'
 })
 
@@ -17,12 +18,13 @@ export async function upload (request: HttpRequest, context: InvocationContext):
   if (typeof file === 'string') return response({ error: 'Invalid file' }, 400)
 
   context.extraOutputs.set(blobOutput, await file.arrayBuffer())
-  // db.collection('images').insertOne({
-  //   username,
-  //   title: data.get('title') || '',
-  //   details: data.get('details') || '',
-  //   file: 
-  // })
+  await db.collection('images').insertOne({
+    username,
+    title: data.get('title') || '',
+    details: data.get('details') || '',
+    file: process.env.StorageBaseUrl + path,
+    createdAt: new Date()
+  })
 
   return response({ success: true })
 }
