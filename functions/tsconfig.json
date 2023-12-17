@@ -5,6 +5,8 @@
     "strictNullChecks": true,
     "outDir": "dist",
     "preserveWatchOutput": true,
-    "rootDir": "src",
+    "removeComments": true,
+    "target": "es6",
+    "rootDir": ".",
   },
 }

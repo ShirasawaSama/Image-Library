@@ -1,6 +1,6 @@
 import { app } from '@azure/functions'
 import type { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
-import { db, response, signJWT } from './utils'
+import { db, response, signJWT } from '../utils'
 
 export async function register (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const { username, password } = await request.json() as { username: string, password: string }

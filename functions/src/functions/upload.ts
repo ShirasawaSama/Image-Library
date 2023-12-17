@@ -1,6 +1,6 @@
 import { app, output } from '@azure/functions'
 import type { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
-import { db, response, getUsername } from './utils'
+import { db, response, getUsername } from '../utils'
 
 const randomId = Date.now().toString(36) + Math.random().toString(36).slice(2)
 const path = `images/${randomId}.png`

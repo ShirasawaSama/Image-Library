@@ -1,7 +1,7 @@
 import { HttpHandler, app } from '@azure/functions'
-import { db } from './utils'
+import { db } from '../utils'
 
-const httpTrigger: HttpHandler = async (req, ctx) => {
+export const httpTrigger: HttpHandler = async (req, ctx) => {
   // Query data from Cosmos DB, with pagination and search
   const query = req.query
   const page = +query.get('page')! || 1
