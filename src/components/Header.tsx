@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
+import { username } from '../service'
+import { Link } from 'react-router-dom'
+import ImageUpload from './ImageUpload'
 
 const Header: React.FC<{ doSearch: (text: string) => void }> = ({ doSearch }) => {
   const [search, setSearch] = useState('')
+  const [open, setOpen] = useState(false)
 
   return (
     <header className="bg-gray-800 p-4">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center space-x-4">
           <h1 className="text-xl">ImageLibrary</h1>
-          <button className="bg-green-500 text-white px-4 py-2 rounded text-sm font-medium">New post</button>
+          {username && <button className="bg-green-500 text-white px-4 py-2 rounded text-sm font-medium" onClick={() => setOpen(true)}>New post</button>}
         </div>
         <div className="flex rounded-full bg-[#0d1829] px-2 w-full max-w-[35rem]">
           <button className="self-center flex p-1 cursor-pointer bg-[#0d1829]"></button>
@@ -27,10 +31,17 @@ const Header: React.FC<{ doSearch: (text: string) => void }> = ({ doSearch }) =>
           </button>
         </div>
         <div className="flex items-center space-x-4">
-          <button className="text-gray-400 hover:text-white">Sign in</button>
-          <button className="bg-pink-500 text-white px-4 py-2 rounded text-sm font-medium">Sign up</button>
+          {username
+            ? <Link className="text-gray-400 hover:text-white" to='/profile'>{username}</Link>
+            : <>
+              <Link className="text-gray-400 hover:text-white" to='/signin'>Sign in</Link>
+              <Link className="bg-pink-500 text-white px-4 py-2 rounded text-sm font-medium" to='/signup'>Sign up</Link>
+            </>
+          }
         </div>
       </div>
+
+      {username && <ImageUpload open={open} onClose={() => setOpen(false)} />}
     </header>
   )
 }

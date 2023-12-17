@@ -1,15 +1,17 @@
-import { HttpHandler, app, input } from '@azure/functions'
-import { MongoClient } from 'mongodb'
-
-const client = new MongoClient(process.env.CosmosDbConnectionString!)
+import { HttpHandler, app } from '@azure/functions'
+import { db } from './utils'
 
 const httpTrigger: HttpHandler = async (req, ctx) => {
   // Query data from Cosmos DB, with pagination and search
   const query = req.query
   const page = +query.get('page')! || 1
   const search = query.get('search') || ''
+  const username = query.get('username') || ''
 
-  const data = await client.db('ImageLibaray').collection('images').find(search ? { title: { $regex: search, $options: 'i' } } : {})
+  const searchObj: Record<string, any> = { }
+  if (search) searchObj['title'] = { $regex: search, $options: 'i' }
+  if (username) searchObj['username'] = username
+  const data = await db.collection('images').find(searchObj)
     .skip((page - 1) * 10).limit(10).toArray()
 
   return {
