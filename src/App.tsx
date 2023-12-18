@@ -9,7 +9,7 @@ import InfiniteScroll from 'react-infinite-scroller'
 
 const Footer: React.FC = () => {
   return (
-    <footer className='bg-gray-800 p-4 mt-4'>
+    <footer className='bg-gray-800 p-4'>
       <div className='max-w-7xl mx-auto text-center text-xs text-gray-400'>
         © 2023 Shirasawa All rights reserved.<br />
         <a
@@ -45,8 +45,6 @@ function Main() {
   const nav = useNavigate()
   const profileUsername = useParams().username || ''
   const pageRef = React.useRef(1)
-
-  console.log(profileUsername)
 
   useEffect(() => {
     pageRef.current = 1

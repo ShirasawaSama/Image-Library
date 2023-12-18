@@ -1,4 +1,5 @@
-import type { HttpRequest, HttpResponseInit } from "@azure/functions"
+import type { HttpRequest, HttpResponseInit } from '@azure/functions'
+import { BlobServiceClient } from '@azure/storage-blob'
 import { MongoClient } from 'mongodb'
 import jsonwebtoken from 'jsonwebtoken'
 
@@ -12,6 +13,7 @@ export const response = (body: object, status?: number, headers: HeadersInit = {
 })
 
 export const db = new MongoClient(process.env.CosmosDbConnectionString!).db('ImageLibaray')
+export const blob = BlobServiceClient.fromConnectionString(process.env.StorageConnectionAppSetting!).getContainerClient('images')
 
 export const signJWT = (payload: object) => jsonwebtoken.sign(payload, process.env.CosmosDbConnectionString!, { expiresIn: '7d' })
 export const getUsername = (req: HttpRequest) => {

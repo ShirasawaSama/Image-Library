@@ -56,3 +56,10 @@ export const upload = async (file: File, title: string, details: string) => {
 }
 
 export const translate = async (id: string) => fetch(`${ENDPOINT}/translate/${id}`).then(res => res.json()).then(res => res.details)
+
+export const deleteImage = async (id: string) => fetch(`${ENDPOINT}/image/${id}`, {
+  method: 'DELETE',
+  headers: {
+    Authorization: `Bearer ${TOKEN}`
+  }
+}).then(res => res.json()).then(({ success }) => success as boolean)

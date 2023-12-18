@@ -1,28 +1,26 @@
-import { app, output } from '@azure/functions'
+import { app } from '@azure/functions'
 import type { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
-import { db, response, getUsername } from '../utils'
+import { db, blob, response, getUsername } from '../utils'
 
-const randomId = Date.now().toString(36) + Math.random().toString(36).slice(2)
-const path = `images/${randomId}.png`
-const blobOutput = output.storageBlob({
-  path,
-  connection: 'StorageConnectionAppSetting'
-})
-
-export async function upload (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+export async function upload (request: HttpRequest): Promise<HttpResponseInit> {
   const username = getUsername(request)
   if (!username) return response({ error: 'Unauthorized' }, 401)
 
   const data = await request.formData()
   const file = data.get('file')!
   if (typeof file === 'string') return response({ error: 'Invalid file' }, 400)
+  if (!file.size) return response({ error: 'Missing file' }, 400)
+  if (file.size > 1024 * 1024 * 5) return response({ error: 'File too large' }, 400)
+  const ext = file.name.split('.').pop()!.toLowerCase() || 'png'
 
-  context.extraOutputs.set(blobOutput, await file.arrayBuffer())
+  const randomId = Date.now().toString(36) + Math.random().toString(36).slice(2)
+  await blob.getBlockBlobClient(`${randomId}.${ext}`).uploadData(await file.arrayBuffer())
+
   await db.collection('images').insertOne({
     username,
     title: data.get('title') || '',
     details: data.get('details') || '',
-    file: process.env.StorageBaseUrl + path,
+    file: `${process.env.StorageBaseUrl}images/${randomId}.${ext}`,
     createdAt: new Date()
   })
 
@@ -32,6 +30,5 @@ export async function upload (request: HttpRequest, context: InvocationContext):
 app.http('upload', {
   methods: ['PUT'],
   authLevel: 'anonymous',
-  extraOutputs: [blobOutput],
   handler: upload
 })

@@ -1,10 +1,18 @@
 # Image Library
 
+A simple image library built with React and Azure Functions.
+
+*This project is my Cloud Native Development course project.*
+
 ## Azure Services
 
 - [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)
 - [Azure Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/)
 - [Azure Storage](https://azure.microsoft.com/en-us/services/storage/)
+
+## Screenshot
+
+![Screenshot](screenshot.jpg)
 
 ## Frontend - React
 
